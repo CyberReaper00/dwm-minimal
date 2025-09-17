@@ -38,7 +38,7 @@ I have disabled the bar, it is completely unnecessary to the point where i dont 
 |   Xterm   |     Ungoogled-chromium      | Discord<br>web-app  |               Nautilus               |            Blueman            |      Easyeffects      |
 |           |      Gemini<br>web-app      | Youtube<br>web-app  |               Obsidian               |    KDEConnect<br>settings     |      Pavucontrol      |
 |           |                             | Whatsapp<br>web-app |                                      |       KDEConnect<br>sms       |                       |
-|           |                             |     Discord app     |                                      |       KDEConnect<br>app       |                       |
+|           |                             | Discord<br>web-app  |                                      |       KDEConnect<br>app       |                       |
 |           |                             |                     |                                      | CUPS settings page<br>web-app |                       |
 ### Layout
 I've made the main layout to be monocle and the tiling layout to be secondary, i want all my focus on the thing im working on and not on something thats open on the side or in the background, so everything is fullscreen - always
