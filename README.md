@@ -3,20 +3,19 @@ This is a minimal build of DWM and i have done some changes in both `dwm.c` but 
 
 But in this readme i will only be going through my `config.def.h`, what i've changed in my layouts, keybindings, workspace/tag settings etc. and i'll mention the patches i've applied to `dwm.c`
 ## Patches
-- alwayscenter
+- [alwayscenter](https://dwm.suckless.org/patches/alwayscenter/)
 	- centers all floating dialogs to the center of the screen
-- blanktags
+- [blanktags](https://dwm.suckless.org/patches/blanktags/)
 	- replaces the numbers on the workspace/tag area on the top left into empty boxes
-- chargecolor - **my own custom patch that I built with the help of @alphab1**
+- chargecolor - my own custom patch that I built with the help of **@[elbachir-one](https://github.com/elbachir-one/)**
 	- built for laptops
 	- when the charger is unplugged, it turns all borders and the statusbar red, when plugged in the colors go back to being blue
-- mediakeys
-	- allows the volume and mute keys to be usable on dwm (they have always worked but were never actually connected to any audio management system and this patch does that)
-	
-all of these patches can be found [here](https://dwm.suckless.org/patches/)
+	- the colors can of course be changed in the `config.h` file
+- mediakeys - another custom patch
+	- this is a modification on the [gist](https://gist.github.com/palopezv/efd34059af6126ad970940bcc6a90f2e) created by **@[palopezv](https://github.com/palopezv/)** which handles the hardware mediakeys on a keyboard
 ## Static Settings
 ### Bar setup
-I have disabled the bar, it is completely unnecessary to the point where i dont even notice it on my screen, legitimately if i want to look at the time i will look at my phone, i just get that tunnel-visioned while working - so i just hid the bar a while ago and havent turned it on since
+I have disabled the bar, it is completely unnecessary to the point where i dont even notice it on my screen, legitimately if i want to look at the time i will look at my phone, i just get that tunnel-visioned while working - so i just hid the bar a while ago and haven't turned it on since
 ### Font settings
 ` static const char *fonts[]			   = { "Hasklig:bold:size=14" }; `
 - I have changed the font and the font size for the status bar
@@ -36,7 +35,7 @@ I have disabled the bar, it is completely unnecessary to the point where i dont 
 
 | 1<br>Work | 2<br>Research/<br>Questions | 3<br>Entertainment  | 4<br>File<br>Management/<br>Creation |   5<br>Device Connectivity    | 6<br>Audio Management |
 | :-------: | :-------------------------: | :-----------------: | :----------------------------------: | :---------------------------: | :-------------------: |
-|  Neovide  |     Ungoogled-chromium      | Discord<br>web-app  |               Nautilus               |            Blueman            |      Easyeffects      |
+|   Xterm   |     Ungoogled-chromium      | Discord<br>web-app  |               Nautilus               |            Blueman            |      Easyeffects      |
 |           |      Gemini<br>web-app      | Youtube<br>web-app  |               Obsidian               |    KDEConnect<br>settings     |      Pavucontrol      |
 |           |                             | Whatsapp<br>web-app |                                      |       KDEConnect<br>sms       |                       |
 |           |                             |     Discord app     |                                      |       KDEConnect<br>app       |                       |
@@ -56,8 +55,6 @@ In dwm there is already `Mod1Mask` and `ShiftMask` but i didnt really like that 
 
 | Key           | Function   |
 | ------------- | ---------- |
-| alt-n         | neovide    |
-| alt-shift-n   | qterminal  |
 | alt-s         | flameshot  |
 | super-shift-b | u-chromium |
 | super-shift-l | slock      |
@@ -81,8 +78,7 @@ In dwm there is already `Mod1Mask` and `ShiftMask` but i didnt really like that 
 
 | Key               | Function                             |
 | ----------------- | ------------------------------------ |
-| alt-shift-q       | close window                         |
-| alt-shift-p       | close window                         |
+| ctrl-shift-=      | close window                         |
 | super-ctrl-j      | monocle layout                       |
 | super-ctrl-k      | tiling layout                        |
 | super-ctrl-l      | no layout \| floating windows        |

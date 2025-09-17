@@ -30,7 +30,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <pthread.h>
 #include <X11/cursorfont.h>
 #include <X11/keysym.h>
 #include <X11/Xatom.h>
@@ -60,6 +59,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
+enum { SchemeNorm, SchemeSel }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
@@ -176,7 +176,6 @@ static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
 static void incnmaster(const Arg *arg);
-static int ischarging(void);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
@@ -217,7 +216,6 @@ static void toggleview(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
 static void unmanage(Client *c, int destroyed);
 static void unmapnotify(XEvent *e);
-static void updatecolors(void);
 static void updatebarpos(Monitor *m);
 static void updatebars(void);
 static void updateclientlist(void);
@@ -243,7 +241,6 @@ static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar height */
 static int lrpad;            /* sum of left and right padding for text */
-static int colorpipe[2];     /* pipe for notifying main thread about color changes */
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
 static void (*handler[LASTEvent]) (XEvent *) = {
@@ -497,8 +494,6 @@ cleanup(void)
 	XSync(dpy, False);
 	XSetInputFocus(dpy, PointerRoot, RevertToPointerRoot, CurrentTime);
 	XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
-	close(colorpipe[0]);
-	close(colorpipe[1]);
 }
 
 void
@@ -989,16 +984,6 @@ incnmaster(const Arg *arg)
 	arrange(selmon);
 }
 
-int
-ischarging(void) {
-	FILE *f = fopen("/sys/class/power_supply/AC/online", "r");
-	if (!f) return 0;
-	int status = 0;
-	fscanf(f, "%d", &status);
-	fclose(f);
-	return status;
-}
-
 #ifdef XINERAMA
 static int
 isuniquegeom(XineramaScreenInfo *unique, size_t n, XineramaScreenInfo *info)
@@ -1398,36 +1383,11 @@ void
 run(void)
 {
 	XEvent ev;
-	int x11_fd = ConnectionNumber(dpy);
-	int maxfd = (colorpipe[0] > x11_fd) ? colorpipe[0] : x11_fd;
-
-	fd_set rfds;
-
-	while (running) {
-		FD_ZERO(&rfds);
-		FD_SET(x11_fd, &rfds);
-		FD_SET(colorpipe[0], &rfds);
-
-		if (select(maxfd + 1, &rfds, NULL, NULL, NULL) < 0) {
-			if (errno == EINTR)
-				continue;
-			die("select failed");
-		}
-
-		if (FD_ISSET(colorpipe[0], &rfds)) {
-			char buf[1];
-			read(colorpipe[0], buf, 1);  /* clear pipe */
-			updatecolors();              /* safe update in main thread */
-		}
-
-		if (FD_ISSET(x11_fd, &rfds)) {
-			while (XPending(dpy)) {
-				XNextEvent(dpy, &ev);
-				if (handler[ev.type])
-					handler[ev.type](&ev);
-			}
-		}
-	}
+	/* main event loop */
+	XSync(dpy, False);
+	while (running && !XNextEvent(dpy, &ev))
+		if (handler[ev.type])
+			handler[ev.type](&ev); /* call handler */
 }
 
 void
@@ -1623,13 +1583,10 @@ setup(void)
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
-	if (pipe(colorpipe) == -1) {
-		die("Failed to create pipe");
-	}
 	/* init appearance */
 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
 	for (i = 0; i < LENGTH(colors); i++)
-		scheme[i] = drw_scm_create(drw, (const char **)colors[i], 3);
+		scheme[i] = drw_scm_create(drw, colors[i], 3);
 	/* init bars */
 	updatebars();
 	updatestatus();
@@ -1692,8 +1649,8 @@ spawn(const Arg *arg)
 {
 	struct sigaction sa;
 
-	if (arg->v == roficmd)
-		rofimon[0] = '0' + selmon->num;
+	if (arg->v == dmenucmd)
+		dmenumon[0] = '0' + selmon->num;
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
@@ -1753,21 +1710,6 @@ tile(Monitor *m)
 			if (ty + HEIGHT(c) < m->wh)
 				ty += HEIGHT(c);
 		}
-}
-
-void *
-themechecker(void *arg) {
-	int last_status = -1;
-	for (;;) {
-		int charging = ischarging();
-		if (charging != last_status) {
-			current_theme = charging ? main_theme : altr_theme;
-			updatecolors();
-			last_status = charging;
-		}
-		usleep(1000000);
-	}
-	return NULL;
 }
 
 void
@@ -1870,34 +1812,6 @@ unmapnotify(XEvent *e)
 			setclientstate(c, WithdrawnState);
 		else
 			unmanage(c, 0);
-	}
-}
-
-void
-updatecolors(void) {
-	colors[SchemeNorm][0] = (char *)current_theme[0];
-	colors[SchemeNorm][1] = (char *)current_theme[1];
-	colors[SchemeNorm][2] = (char *)current_theme[1];
-
-	colors[SchemeSel][0] = (char *)current_theme[0];
-	colors[SchemeSel][1] = (char *)current_theme[2];
-	colors[SchemeSel][2] = (char *)current_theme[2];
-
-	for (int i = 0; i < LENGTH(colors); i++) {
-		if (scheme[i])
-			free(scheme[i]);
-		scheme[i] = drw_scm_create(drw, (const char **)colors[i], 3);
-	}
-
-	for (Monitor *m = mons; m; m = m->next) {
-		drawbar(m);
-		arrange(m);
-
-		/* Update borders of all clients on this monitor */
-		for (Client *c = m->clients; c; c = c->next) {
-			XSetWindowBorder(dpy, c->win,
-					scheme[c == m->sel ? SchemeSel : SchemeNorm][2].pixel);
-		}
 	}
 }
 
@@ -2239,17 +2153,12 @@ main(int argc, char *argv[])
 		die("dwm: cannot open display");
 	checkotherwm();
 	setup();
-
-	pthread_t theme_thread;
-	pthread_create(&theme_thread, NULL, themechecker, NULL);
-
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)
 		die("pledge");
 #endif /* __OpenBSD__ */
 	scan();
 	run();
-	pthread_join(theme_thread, NULL);
 	cleanup();
 	XCloseDisplay(dpy);
 	return EXIT_SUCCESS;

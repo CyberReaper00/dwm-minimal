@@ -1,33 +1,5 @@
-diff --git |
---- a/config.def.h	2025-07-11 12:40:04.649477979 +0500
-+++ b/config.def.h	2025-09-17 13:30:07.039306825 +0500
-@@ -1,100 +1,161 @@
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
--static const char dmenufont[]       = "monospace:size=10";
--static const char col_gray1[]       = "#222222";
--static const char col_gray2[]       = "#444444";
--static const char col_gray3[]       = "#bbbbbb";
--static const char col_gray4[]       = "#eeeeee";
--static const char col_cyan[]        = "#005577";
--static const char *colors[][3]      = {
--	/*               fg         bg         border   */
--	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
--	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
-+char *colors[][3] = { // default colors as backup
-+ 	/*               text       bg         border   */
-+	[SchemeNorm] = { "#ffffff", "#222222", "#444444" },
-+	[SchemeSel]  = { "#ffffff", "#005577", "#005577" },
-+ }; // the bg color is mainly used for the status bar,
-+	 // it doesnt visibly effect any client windows
- 
-+static const char **current_theme = NULL; // variable to apply final changes | DO NOT CHANGE
-+static const char *main_theme[]	= { "#FFFFFF", "#0E1C4A", "#3E54BD" }; // theme while charging
-+static const char *altr_theme[]	= { "#FFFFFF", "#340B07", "#73493D" }; // theme while discharging
- 
---- a/dwm.c		2025-07-11 16:23:56.314010000 +0500
-+++ b/dwm.c		2025-09-17 13:30:27.272126211 +0500
+--- dwm.c.orig	2025-07-11 16:23:56.314010000 +0500
++++ dwm.c	2025-09-17 13:30:27.272126211 +0500
 @@ -30,6 +30,7 @@
  #include <unistd.h>
  #include <sys/types.h>

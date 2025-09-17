@@ -7,7 +7,6 @@ static const int showbar			= 0;  /* 0 means no bar */
 static const int topbar				= 1;  /* 0 means bottom bar */
 static const char *fonts[]			= { "Hasklig:bold:size=14" };
 
-enum { SchemeNorm, SchemeSel }; /* color schemes */
 char *colors[][3] = {
  	/*               fg         bg         border   */
 	[SchemeNorm] = { "#ffffff", "#222222", "#444444" },
