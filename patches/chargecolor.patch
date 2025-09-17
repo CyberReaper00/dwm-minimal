@@ -143,17 +143,6 @@ static const char *fonts[]          = { "monospace:size=10" };
  	/* init bars */
  	updatebars();
  	updatestatus();
-@@ -1649,8 +1693,8 @@
- {
- 	struct sigaction sa;
- 
--	if (arg->v == dmenucmd)
--		dmenumon[0] = '0' + selmon->num;
-+	if (arg->v == roficmd)
-+		rofimon[0] = '0' + selmon->num;
- 	if (fork() == 0) {
- 		if (dpy)
- 			close(ConnectionNumber(dpy));
 @@ -1712,6 +1756,21 @@
  		}
  }
