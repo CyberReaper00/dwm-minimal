@@ -992,12 +992,40 @@ incnmaster(const Arg *arg)
 
 int
 ischarging(void) {
-	FILE *f = fopen("/sys/class/power_supply/AC/online", "r");
-	if (!f) return 0;
-	int status = 0;
-	fscanf(f, "%d", &status);
-	fclose(f);
-	return status;
+    const char *base = "/sys/class/power_supply/";
+    DIR *dir = opendir(base);
+    if (!dir) return 0;
+
+    struct dirent *entry;
+    char path[PATH_MAX];
+    FILE *f;
+    int status = 0;
+
+    while ((entry = readdir(dir))) {
+        if (entry->d_type != DT_DIR && entry->d_type != DT_LNK)
+            continue;
+
+        snprintf(path, sizeof(path), "%s%s/type", base, entry->d_name);
+        f = fopen(path, "r");
+        if (!f) continue;
+
+        char type[32];
+        if (fgets(type, sizeof(type), f)) {
+            if (strncmp(type, "Mains", 5) == 0) {
+                fclose(f);
+                snprintf(path, sizeof(path), "%s%s/online", base, entry->d_name);
+                f = fopen(path, "r");
+                if (!f) break;
+                fscanf(f, "%d", &status);
+                fclose(f);
+                break;
+            }
+        }
+        fclose(f);
+    }
+
+    closedir(dir);
+    return status;
 }
 
 #ifdef XINERAMA
