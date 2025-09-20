@@ -147,7 +147,12 @@ static const Key keys[] = {
 	{ SUPER|SHIFT,	XK_period,	tagmon,         {.i = +1 } },
 	{ SUPER|SHIFT,	XK_q,		spawn,			{.v = logoutcmd } },
 
-	{ CTRL|ALT|SHIFT,	XK_q,		quit,			{0} },
+	{ CTRL|ALT|SHIFT,	XK_q,		quit,		{0} },
+
+	// Scratchpad controls
+	{ CTRL|SUPER,	XK_minus, scratchpad_show,	{0} },
+	{ CTRL|SHIFT,	XK_minus, scratchpad_hide,	{0} },
+	{ SUPER,		XK_equal, scratchpad_remove,{0} },
 
 	// Tag Keys
 	TAGKEYS(                        XK_1,                      0)
