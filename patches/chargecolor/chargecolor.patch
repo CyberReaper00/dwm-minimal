@@ -26,8 +26,8 @@ static const char *fonts[]          = { "monospace:size=10" };
 +static const char *main_theme[]	= { "#FFFFFF", "#0E1C4A", "#3E54BD" }; // theme while charging
 +static const char *altr_theme[]	= { "#FFFFFF", "#340B07", "#73493D" }; // theme while discharging
  
---- a/dwm.c		2025-07-11 16:23:56.314010000 +0500
-+++ b/dwm.c		2025-09-17 13:30:27.272126211 +0500
+--- a/dwm.c	2025-07-11 16:23:56.314010000 +0500
++++ b/dwm.c	2025-09-20 10:42:19.086750803 +0500
 @@ -30,6 +30,7 @@
  #include <unistd.h>
  #include <sys/types.h>
@@ -69,24 +69,52 @@ static const char *fonts[]          = { "monospace:size=10" };
  }
  
  void
-@@ -984,6 +990,16 @@
+@@ -984,6 +990,44 @@
  	arrange(selmon);
  }
  
 +int
 +ischarging(void) {
-+	FILE *f = fopen("/sys/class/power_supply/AC/online", "r");
-+	if (!f) return 0;
-+	int status = 0;
-+	fscanf(f, "%d", &status);
-+	fclose(f);
-+	return status;
++    const char *base = "/sys/class/power_supply/";
++    DIR *dir = opendir(base);
++    if (!dir) return 0;
++
++    struct dirent *entry;
++    char path[PATH_MAX];
++    FILE *f;
++    int status = 0;
++
++    while ((entry = readdir(dir))) {
++        if (entry->d_type != DT_DIR && entry->d_type != DT_LNK)
++            continue;
++
++        snprintf(path, sizeof(path), "%s%s/type", base, entry->d_name);
++        f = fopen(path, "r");
++        if (!f) continue;
++
++        char type[32];
++        if (fgets(type, sizeof(type), f)) {
++            if (strncmp(type, "Mains", 5) == 0) {
++                fclose(f);
++                snprintf(path, sizeof(path), "%s%s/online", base, entry->d_name);
++                f = fopen(path, "r");
++                if (!f) break;
++                fscanf(f, "%d", &status);
++                fclose(f);
++                break;
++            }
++        }
++        fclose(f);
++    }
++
++    closedir(dir);
++    return status;
 +}
 +
  #ifdef XINERAMA
  static int
  isuniquegeom(XineramaScreenInfo *unique, size_t n, XineramaScreenInfo *info)
-@@ -1383,11 +1399,36 @@
+@@ -1383,11 +1427,36 @@
  run(void)
  {
  	XEvent ev;
@@ -128,7 +156,7 @@ static const char *fonts[]          = { "monospace:size=10" };
  }
  
  void
-@@ -1583,10 +1624,13 @@
+@@ -1583,10 +1652,13 @@
  	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
  	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
  	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
@@ -143,7 +171,18 @@ static const char *fonts[]          = { "monospace:size=10" };
  	/* init bars */
  	updatebars();
  	updatestatus();
-@@ -1712,6 +1756,21 @@
+@@ -1649,8 +1721,8 @@
+ {
+ 	struct sigaction sa;
+ 
+-	if (arg->v == dmenucmd)
+-		dmenumon[0] = '0' + selmon->num;
++	if (arg->v == roficmd)
++		rofimon[0] = '0' + selmon->num;
+ 	if (fork() == 0) {
+ 		if (dpy)
+ 			close(ConnectionNumber(dpy));
+@@ -1712,6 +1784,21 @@
  		}
  }
  
@@ -165,7 +204,7 @@ static const char *fonts[]          = { "monospace:size=10" };
  void
  togglebar(const Arg *arg)
  {
-@@ -1816,6 +1875,34 @@
+@@ -1816,6 +1903,34 @@
  }
  
  void
@@ -200,7 +239,7 @@ static const char *fonts[]          = { "monospace:size=10" };
  updatebars(void)
  {
  	Monitor *m;
-@@ -2153,12 +2240,17 @@
+@@ -2153,12 +2268,17 @@
  		die("dwm: cannot open display");
  	checkotherwm();
  	setup();

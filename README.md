@@ -7,12 +7,10 @@ But in this readme i will only be going through my `config.def.h`, what i've cha
 	- centers all floating dialogs to the center of the screen
 - [blanktags](https://dwm.suckless.org/patches/blanktags/)
 	- replaces the numbers on the workspace/tag area on the top left into empty boxes
-- chargecolor - my own custom patch that I built with the help of **@[elbachir-one](https://github.com/elbachir-one/)**
+- chargecolor - my own custom patch that I built with the help of **[@elbachir-one](https://github.com/elbachir-one/)**
 	- built for laptops
 	- when the charger is unplugged, it turns all borders and the statusbar red, when plugged in the colors go back to being blue
 	- the colors can of course be changed in the `config.h` file
-- mediakeys - another custom patch
-	- this is a modification on the [gist](https://gist.github.com/palopezv/efd34059af6126ad970940bcc6a90f2e) created by **@[palopezv](https://github.com/palopezv/)** which handles the hardware mediakeys on a keyboard
 ## Static Settings
 ### Bar setup
 I have disabled the bar, it is completely unnecessary to the point where i dont even notice it on my screen, legitimately if i want to look at the time i will look at my phone, i just get that tunnel-visioned while working - so i just hid the bar a while ago and haven't turned it on since
@@ -60,6 +58,7 @@ In dwm there is already `Mod1Mask` and `ShiftMask` but i didnt really like that 
 | super-shift-l | slock      |
 <a></a>
 **Navigation**
+<a></a>
 
 | Key         | Function                      |
 | ----------- | ----------------------------- |
@@ -75,6 +74,7 @@ In dwm there is already `Mod1Mask` and `ShiftMask` but i didnt really like that 
 | super-enter | switch window in master area  |
 <a></a>
 **View Manipulation**
+<a></a>
 
 | Key               | Function                             |
 | ----------------- | ------------------------------------ |
