@@ -101,8 +101,7 @@ static const Layout layouts[] = {
 /* commands */
 static char rofimon[2] = "0"; 	/* component of dmenucmd, manipulated in spawn() */
 static const char *roficmd[]	= { "rofi", "-show", "drun", NULL };
-static const char *termcmd[]	= { "sh", "/home/nixos/nixos/scripts/qterm.sh", NULL };
-static const char *nvcmd[]		= { "neovide", NULL };
+static const char *termcmd[]	= { "xterm", "-e", "nvim", NULL };
 static const char *scrshot[]	= { "flameshot", "gui", NULL };
 static const char *browser[]	= { "chromium", NULL };
 static const char *lockscr[]	= { "slock", NULL };
@@ -113,9 +112,8 @@ static const Key keys[] = {
 	// modifier		key			function        argument
 
 	// Custom
-	{ ALT,			XK_n,		spawn,          {.v = nvcmd } },
-	{ ALT|SHIFT,	XK_n,		spawn,          {.v = termcmd } },
-	{ ALT,			XK_s,		spawn,          {.v = scrshot } },
+	{ SUPER,		XK_n,		spawn,          {.v = termcmd } },
+	{ SUPER,		XK_s,		spawn,          {.v = scrshot } },
 	{ SUPER|SHIFT,	XK_b,		spawn,          {.v = browser } },
 	{ SUPER|SHIFT,	XK_l,		spawn,          {.v = lockscr } },
 	
