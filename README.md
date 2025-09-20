@@ -56,9 +56,12 @@ In dwm there is already `Mod1Mask` and `ShiftMask` but i didnt really like that 
 | alt-s         | flameshot  |
 | super-shift-b | u-chromium |
 | super-shift-l | slock      |
-<a></a>
+
+
+
 **Navigation**
-<a></a>
+
+
 
 | Key         | Function                      |
 | ----------- | ----------------------------- |
@@ -72,9 +75,11 @@ In dwm there is already `Mod1Mask` and `ShiftMask` but i didnt really like that 
 | super-h     | resize master window to left  |
 | super-l     | resize master window to right |
 | super-enter | switch window in master area  |
-<a></a>
+
+
 **View Manipulation**
-<a></a>
+
+
 
 | Key               | Function                             |
 | ----------------- | ------------------------------------ |
