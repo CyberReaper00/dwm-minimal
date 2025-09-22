@@ -41,6 +41,8 @@ static const char *fonts[]          = { "monospace:size=10" };
  static void grabkeys(void);
  static void incnmaster(const Arg *arg);
 +static int ischarging(void);
++#include <dirent.h>
++#include <sys/stat.h>
  static void keypress(XEvent *e);
  static void killclient(const Arg *arg);
  static void manage(Window w, XWindowAttributes *wa);
