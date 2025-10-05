@@ -1,11 +1,13 @@
 /* See LICENSE file for copyright and license details. */
 
+// #005577
+// #222222
 /* appearance */
+#define SHOWBAR -69
 static const unsigned int borderpx	= 0;  /* border pixel of windows */
 static const unsigned int snap		= 32; /* snap pixel */
-static const int showbar			= 0;  /* 0 means no bar */
-static const int topbar				= 1;  /* 0 means bottom bar */
 static const char *fonts[]			= { "Hasklig:bold:size=14" };
+static const char *barlayout		= "tl|s";
 
 char *colors[][3] = {
  	/*               fg         bg         border   */
@@ -27,9 +29,6 @@ static const Rule rules[] = {
 
     // class		instance
 	// title		tags mask		isfloating		monitor
-
-    {"neovide",		"neovide",
-	NULL,			1 << 0,			0,				-1},
 
     {"Chromium-browser",	"chromium-browser",
 	NULL,			1 << 1,      	0,          	-1},
@@ -114,12 +113,13 @@ static const Key keys[] = {
 	// Custom
 	{ SUPER,		XK_n,		spawn,          {.v = termcmd } },
 	{ SUPER,		XK_s,		spawn,          {.v = scrshot } },
-	{ SUPER|SHIFT,	XK_b,		spawn,          {.v = browser } },
-	{ SUPER|SHIFT,	XK_l,		spawn,          {.v = lockscr } },
+	{ SUPER|CTRL,	XK_b,		spawn,          {.v = browser } },
+	{ SUPER|CTRL,	XK_l,		spawn,          {.v = lockscr } },
 	
 	// Navigation
 	{ ALT,			XK_space,	spawn,          {.v = roficmd } },
 	{ SUPER,		XK_b,		togglebar,      {0} },
+	{ SUPER,		XK_b,		toggleextrabar, {0} },
 	{ ALT,			XK_Tab,		view,           {0} },
 	{ ALT,			XK_a,		focusstack,     {.i = +1 } },
 	{ ALT|SHIFT,	XK_a,		focusstack,     {.i = -1 } },
