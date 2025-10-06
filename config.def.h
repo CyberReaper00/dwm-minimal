@@ -1,12 +1,11 @@
 /* See LICENSE file for copyright and license details. */
 
-// #005577
-// #222222
 /* appearance */
-#define SHOWBAR -69
+#define WHEREBARS 69
+
 static const unsigned int borderpx	= 0;  /* border pixel of windows */
 static const unsigned int snap		= 32; /* snap pixel */
-static const char *fonts[]			= { "Hasklig:bold:size=14" };
+static const char *fonts[]			= { "Hasklig:bold:size=12" };
 static const char *barlayout		= "tl|s";
 
 char *colors[][3] = {
@@ -16,7 +15,7 @@ char *colors[][3] = {
 };
 
 static const char **current_theme = NULL;
-static const char *main_theme[]	= { "#FFFFFF", "#0E1C4A", "#3E54BD" };
+static const char *main_theme[]	= { "#FFFFFF", "#222222", "#005577" };
 static const char *altr_theme[]	= { "#FFFFFF", "#340B07", "#73493D" };
 
 /* tagging */
