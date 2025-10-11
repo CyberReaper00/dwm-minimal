@@ -297,18 +297,17 @@ static Client * scratchpad_last_showed = NULL;
 /* configuration, allows nested code to access above variables */
 #include "config.h"
 
-#if SHOWBAR == 2
-	static const int showbar  = 1;
-	static const int topbar   = 1;
-#elif SHOWBAR == 1
-	static const int showbar  = 0;
-	static const int topbar   = 1;
-#elif SHOWBAR == 0
-	static const int showbar  = 0;
-	static const int topbar   = 0;
-#else
-	static const int showbar  = 1;
-	static const int topbar   = 1;
+#if WHEREBARS == 0
+	static const int topbar  = 0;
+	static const int showbar = 0;
+
+#elif WHEREBARS == 1
+	static const int topbar  = 1;
+	static const int showbar = 0;
+
+#elif WHEREBARS < 0 || WHEREBARS >= 2
+	static const int topbar  = 1;
+	static const int showbar = 1;
 #endif
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
@@ -752,8 +751,6 @@ drawbar(Monitor *m)
 	unsigned int i, j, occ = 0, urg = 0;
 	Client *c;
 
-	if (!m->showbar)
-		return;
 	if (barlayout[0] == '\0')
 		barlayout = "tln|s";
 
@@ -1905,8 +1902,8 @@ spawn(const Arg *arg)
 {
 	struct sigaction sa;
 
-	if (arg->v == roficmd)
-		rofimon[0] = '0' + selmon->num;
+	if (arg->v == dmenucmd)
+		dmenumon[0] = '0' + selmon->num;
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));

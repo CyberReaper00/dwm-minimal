@@ -97,8 +97,8 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char rofimon[2] = "0"; 	/* component of dmenucmd, manipulated in spawn() */
-static const char *roficmd[]	= { "rofi", "-show", "drun", NULL };
+static char dmenumon[2] = "0"; 	/* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[]	= { "dmenu_run", "-i", "-p", "Search:", NULL };
 static const char *termcmd[]	= { "xterm", "-e", "nvim", NULL };
 static const char *scrshot[]	= { "flameshot", "gui", NULL };
 static const char *browser[]	= { "chromium", NULL };
@@ -116,7 +116,7 @@ static const Key keys[] = {
 	{ SUPER|CTRL,	XK_l,		spawn,          {.v = lockscr } },
 	
 	// Navigation
-	{ ALT,			XK_space,	spawn,          {.v = roficmd } },
+	{ ALT,			XK_space,	spawn,          {.v = dmenucmd } },
 	{ SUPER,		XK_b,		togglebar,      {0} },
 	{ SUPER,		XK_b,		toggleextrabar, {0} },
 	{ ALT,			XK_Tab,		view,           {0} },
