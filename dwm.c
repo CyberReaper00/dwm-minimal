@@ -305,7 +305,11 @@ static Client * scratchpad_last_showed = NULL;
 	static const int topbar  = 1;
 	static const int showbar = 0;
 
-#elif WHEREBARS < 0 || WHEREBARS >= 2
+#elif WHEREBARS == 2
+	static const int topbar  = 0;
+	static const int showbar = 1;
+
+#elif WHEREBARS < 0 || WHEREBARS >= 3
 	static const int topbar  = 1;
 	static const int showbar = 1;
 #endif
