@@ -1,6 +1,6 @@
 From 359f0eb4b306bffbdc68e6cb030417f39911163a Mon Sep 17 00:00:00 2001
 From: nixos <nahyanl63@gmail.com>
-Date: Sun, 5 Oct 2025 18:38:17 +0500
+Date: Thu, 23 Oct 2025 18:38:17 +0500
 Subject: [PATCH] updated dualstatus code to be dualshiftingstatus
 
 ---
@@ -169,7 +169,7 @@ index f1d86b2..512b62b 100644
 +
 +	if (m == mons && eb.show) {
 +		m->wh -= bh;
-+		
++
 +		if (eb.split) {
 +			eb.y = topbar ? m->wy + m->wh : m->wy;
 +			m->wy = m->topbar ? m->wy : m->wy + bh;
