@@ -17,7 +17,7 @@ index 9efa774..7a55d33 100644
  
 -/* appearance */
 +/* appearance ુ*/
-+#define WHEREBARS 2
++#define WHEREBARS 3
 +
  static const unsigned int borderpx  = 1;        /* border pixel of windows */
  static const unsigned int snap      = 32;       /* snap pixel */
@@ -71,14 +71,20 @@ index f1d86b2..512b62b 100644
  #include "config.h"
  
 +#if WHEREBARS == 0
-+	static const int topbar     = 0;
-+	static const int showbar    = 0;
++	static const int topbar  = 0;
++	static const int showbar = 0;
++
 +#elif WHEREBARS == 1
-+	static const int topbar     = 1;
-+	static const int showbar    = 0;
-+#elif WHEREBARS < 0 || WHEREBARS >= 2
-+	static const int topbar     = 1;
-+	static const int showbar    = 1;
++	static const int topbar  = 1;
++	static const int showbar = 0;
++
++#elif WHEREBARS == 2
++   static const int topbar  = 0;
++   static const int showbar = 1;
++
++#elif WHEREBARS < 0 || WHEREBARS >= 3
++   static const int topbar  = 1;
++   static const int showbar = 1;
 +#endif
 +
  /* compile-time check if all tags fit into an unsigned int bit array. */
