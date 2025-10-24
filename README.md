@@ -9,8 +9,16 @@ But in this readme i will only be going through my `config.def.h`, what i've cha
 	- replaces the numbers on the workspace/tag area on the top left into empty boxes
 - chargecolor - my own custom patch that I built with the help of **[@elbachir-one](https://github.com/elbachir-one/)**
 	- built for laptops
-	- when the charger is unplugged, it turns all borders and the statusbar red, when plugged in the colors go back to being blue
+	- when the charger is unplugged, it turns all borders and the status bar red, when plugged in the colors go back to being blue
 	- the colors can of course be changed in the `config.h` file
+- dualshiftingstatus - an improvement on the **dualstatus** patch that i created which lets you move two bars into four seperate configurations
+	- both on top, overlapping
+	- both on bottom, overlapping
+	- main bar on top and extra bar on bottom
+	- extra bar on bottom and main bar on bottom
+- commandbase - this isnt a patch for dwm but for dmemu that i created, it allows the user to define commands, instead of executables, to be placed in dmenu search where the user can search for them
+	- it has a file that you can configure with any commands that you use often but dont want to type them out
+	- any number of commands can just be placed in here and on refreshal of dmenu, the commands will be accessible as search items
 ## Static Settings
 ### Bar setup
 I have disabled the bar, it is completely unnecessary to the point where i dont even notice it on my screen, legitimately if i want to look at the time i will look at my phone, i just get that tunnel-visioned while working - so i just hid the bar a while ago and haven't turned it on since
