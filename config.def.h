@@ -4,7 +4,7 @@
 #define WHEREBARS 69
 
 static const unsigned int borderpx	= 0;  /* border pixel of windows */
-static const unsigned int snap		= 32; /* snap pixel */
+static const unsigned int snap		= 0; /* snap pixel */
 static const char *fonts[]			= { "Hasklig:bold:size=12" };
 static const char *barlayout		= "tl|s";
 
